@@ -1,38 +1,47 @@
 # StatusLite
 
-A lightweight service status dashboard built as a portfolio project.
+[![Live demo](https://img.shields.io/badge/live-demo-brightgreen)](https://statuslite.michovski.site)
+[![Portfolio](https://img.shields.io/badge/portfolio-michovski.site-black)](https://michovski.site)
+
+![StatusLite preview](docs/preview.png)
+
+Lightweight service status dashboard.
+
+## Live
+
+**https://statuslite.michovski.site**
 
 ## Features
-- Add and remove monitored services
-- Change live service state: operational / degraded / outage
-- Log incidents with service, status and message
-- Dashboard metrics
-- 7-day uptime visualization
-- Local persistence with `localStorage`
-- Fully responsive layout
-- Zero external dependencies
-- Netlify-ready
+
+- Add, remove and update monitored services
+- Operational / degraded / outage states
+- Incident logging
+- Uptime and dashboard metrics
+- Browser persistence with `localStorage`
+- Responsive layout
 
 ## Stack
+
 - HTML5
 - CSS3
 - Vanilla JavaScript
-- Browser `localStorage`
+- localStorage
 
 ## Run locally
-Open `index.html` directly, or use VS Code + Live Server.
 
-## Deploy
-### Netlify
-Connect the GitHub repository and set the publish directory to `.`. No build command is required.
+No build step is required.
 
-### GitHub Pages
-Enable Pages in repository settings and deploy from the `main` branch.
+```bash
+git clone https://github.com/michovskiraw/statuslite.git
+cd statuslite
+```
 
-## Suggested repo description
-> Minimal service status dashboard built with vanilla JavaScript. Local persistence, incident tracking and responsive UI.
+Then open `index.html`, or use VS Code + Live Server.
 
-## Portfolio note
-This is a demonstration / personal project and does not represent a commercial monitoring service.
+## Notes
 
-Built by Michał Ciechanowski.
+This is a personal/demo portfolio project.
+
+---
+
+Built by **Michał Ciechanowski** · [michovski.site](https://michovski.site)
