@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d10" />
+  <meta name="description" content="StatusLite — a lightweight service status dashboard." />
+  <meta property="og:title" content="StatusLite" />
+  <meta property="og:description" content="A lightweight service status dashboard built with vanilla JavaScript." />
+  <title>StatusLite — Service Status Dashboard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top"><span class="brand-mark">●</span><span>StatusLite</span></a>
+    <div class="header-actions">
+      <button class="ghost-btn" id="resetDemoBtn" type="button">Reset demo</button>
+      <button class="primary-btn" id="openServiceModalBtn" type="button">+ Add service</button>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">LIGHTWEIGHT STATUS MONITORING</p>
+        <h1>Know what’s up.<br><span>Before users ask.</span></h1>
+        <p class="hero-copy">A minimal status dashboard for small apps, APIs and side projects. Everything runs locally in your browser — no backend required.</p>
+      </div>
+      <aside class="overall-card" aria-live="polite">
+        <div class="overall-top"><span class="status-dot" id="overallDot"></span><span id="overallLabel">All systems operational</span></div>
+        <div class="overall-time"><strong id="clockValue">--:--</strong><span>local time</span></div>
+      </aside>
+    </section>
+
+    <section class="metrics-grid">
+      <article class="metric-card"><span>Services</span><strong id="servicesCount">0</strong><small>tracked</small></article>
+      <article class="metric-card"><span>Operational</span><strong id="operationalCount">0</strong><small>healthy now</small></article>
+      <article class="metric-card"><span>Average uptime</span><strong id="avgUptime">0%</strong><small>demo period</small></article>
+      <article class="metric-card"><span>Open incidents</span><strong id="openIncidents">0</strong><small>needs attention</small></article>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <div><p class="eyebrow">SERVICES</p><h2>Current status</h2></div>
+        <div class="legend">
+          <span><i class="legend-dot operational"></i>Operational</span>
+          <span><i class="legend-dot degraded"></i>Degraded</span>
+          <span><i class="legend-dot outage"></i>Outage</span>
+        </div>
+      </div>
+      <div id="servicesList" class="services-list"></div>
+    </section>
+
+    <section class="content-grid">
+      <div class="section-shell">
+        <div class="section-heading compact">
+          <div><p class="eyebrow">INCIDENTS</p><h2>Recent activity</h2></div>
+          <button class="text-btn" id="openIncidentModalBtn" type="button">+ New incident</button>
+        </div>
+        <div id="incidentsList" class="incidents-list"></div>
+      </div>
+
+      <aside class="section-shell">
+        <div class="section-heading compact"><div><p class="eyebrow">UPTIME</p><h2>Last 7 days</h2></div></div>
+        <div id="uptimeBars" class="uptime-bars"></div>
+        <div class="uptime-footer">
+          <div><strong id="uptimeSummary">99.98%</strong><span>average uptime</span></div>
+          <div><strong>7d</strong><span>demo window</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="about-panel">
+      <div><p class="eyebrow">ABOUT THIS PROJECT</p><h2>Built to stay simple.</h2></div>
+      <p>StatusLite is a portfolio demo project by Michał Ciechanowski. It uses plain HTML, CSS and JavaScript with localStorage persistence, responsive UI and zero external dependencies.</p>
+      <a class="ghost-btn inline-link" href="https://github.com/" target="_blank" rel="noreferrer">View source ↗</a>
+    </section>
+  </main>
+
+  <footer><span>StatusLite</span><span>Vanilla JS · localStorage · no backend</span></footer>
+
+  <dialog id="serviceModal" class="modal">
+    <form class="modal-card" id="serviceForm">
+      <div class="modal-heading"><div><p class="eyebrow">NEW SERVICE</p><h3>Add a service</h3></div><button class="icon-btn" type="button" data-close="serviceModal">×</button></div>
+      <label>Service name<input id="serviceName" maxlength="40" placeholder="e.g. Public API" required /></label>
+      <label>Short description<input id="serviceDescription" maxlength="80" placeholder="e.g. api.statuslite.dev" required /></label>
+      <label>Current status<select id="serviceStatus"><option value="operational">Operational</option><option value="degraded">Degraded performance</option><option value="outage">Major outage</option></select></label>
+      <label>Uptime (%)<input id="serviceUptime" type="number" min="90" max="100" step="0.01" value="99.99" required /></label>
+      <div class="modal-actions"><button class="ghost-btn" type="button" data-close="serviceModal">Cancel</button><button class="primary-btn" type="submit">Add service</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="incidentModal" class="modal">
+    <form class="modal-card" id="incidentForm">
+      <div class="modal-heading"><div><p class="eyebrow">INCIDENT</p><h3>Log an incident</h3></div><button class="icon-btn" type="button" data-close="incidentModal">×</button></div>
+      <label>Title<input id="incidentTitle" maxlength="70" placeholder="e.g. Elevated API latency" required /></label>
+      <label>Service<select id="incidentService" required></select></label>
+      <label>State<select id="incidentState"><option value="investigating">Investigating</option><option value="monitoring">Monitoring</option><option value="resolved">Resolved</option></select></label>
+      <label>Update<textarea id="incidentMessage" rows="4" maxlength="220" placeholder="What happened?" required></textarea></label>
+      <div class="modal-actions"><button class="ghost-btn" type="button" data-close="incidentModal">Cancel</button><button class="primary-btn" type="submit">Save incident</button></div>
+    </form>
+  </dialog>
+
+  <template id="serviceTemplate">
+    <article class="service-card">
+      <div class="service-info"><span class="service-status-dot"></span><div><h3 class="service-name"></h3><p class="service-description"></p></div></div>
+      <div class="service-meta">
+        <div><strong class="service-uptime"></strong><span>uptime</span></div>
+        <select class="service-status-select"><option value="operational">Operational</option><option value="degraded">Degraded</option><option value="outage">Outage</option></select>
+        <button class="delete-btn" type="button" aria-label="Delete service">×</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
